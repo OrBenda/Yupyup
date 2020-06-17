@@ -1,0 +1,99 @@
+כתבו שיטה סטטית המקבלת כפרמטר מערך arr המלא במספרים שלמים, )חיוביים ושליליים(.
+השיטה צריכה למצוא שלשה של מספרים במערך )לאו דווקא סמוכים זה לזה( שהמכפלה שלהם
+היא המקסימלית. השיטה תדפיס את שלושת המספרים האלו ותחזיר את המכפלה
+המקסימלית. אין חשיבות לסדר ההדפסה.
+שימו לב – עליכם להדפיס את שלושת המספרים מופרדים ברווח ללא טקסט נוסף.
+אפשר להניח שאורך המערך הוא לפחות 3.
+לדוגמא:
+ אם המערך arr מכיל את המספרים הבאים:
+0 1 2 3 4
+-4 1 -8 9 6
+אזי תודפס השלשה: 9 8 -4-
+-4 * -8 * 9 = 288 המכפלה ותוחזר
+
+**************************************************************************************************************
+
+
+
+
+public static int findTriplet(int[] arr) {
+        int firstVal = Math.min(Math.min(arr[0], arr[1]), arr[2]);
+        int secondVal = Math.max(Math.max(arr[0], arr[1]), arr[2]);
+        int thirdVal = Math.max(Math.min(arr[0], arr[1]), Math.min(Math.max(arr[0], arr[1]), arr[2]));
+        int triplet = firstVal * secondVal * thirdVal;
+        int count = countNegative(arr);
+        for (int i = 3; i < arr.length; i++) {
+            if (count == 0) {
+                firstVal = thirdVal * secondVal * arr[i] > triplet ? arr[i] : firstVal;
+            }
+            if (count == 1 && triplet <= 0) {
+                if (arr[i] > 0) {
+                    firstVal = thirdVal * secondVal * arr[i] > triplet ? arr[i] : firstVal;
+                    count--;
+                }
+                if (arr[i] < 0) {
+                    thirdVal = firstVal * secondVal * arr[i] > triplet ? arr[i] : thirdVal;
+                }
+            }
+//
+            if (count == 2) {
+                if (arr[i] < 0) {
+                    thirdVal = firstVal * secondVal * arr[i] > triplet ? arr[i] : thirdVal;
+                    count++;
+                }
+                if (arr[i] > 0) {
+                    secondVal = firstVal * thirdVal * arr[i] > triplet ? arr[i] : secondVal;
+                }
+            }
+            if (count == 3) {
+                if (arr[i] < 0) {
+                    firstVal = thirdVal * secondVal * arr[i] > triplet ? arr[i] : firstVal;
+                }
+                if (arr[i] > 0) {
+                    secondVal = firstVal * thirdVal * arr[i] > triplet ? arr[i] : secondVal;
+                    count--;
+                }
+            }
+            if (triplet == 0) {
+                if ((thirdVal == 0 && secondVal == 0) || (firstVal == 0 && secondVal == 0) || (firstVal == 0 && thirdVal == 0)) {
+                    if (arr[i] < 0) {
+                        if (arr[i] > firstVal) {
+                            thirdVal = arr[i];
+                        } else {
+                            thirdVal = firstVal;
+                            firstVal = arr[i];
+                        }
+                        count++;
+                    }
+                    if (arr[i] > 0) {
+                        if (arr[i] > secondVal) {
+                            thirdVal = secondVal;
+                            secondVal = arr[i];
+                        } else {
+                            thirdVal = arr[i];
+                        }
+                    }
+                }
+                if (thirdVal == 0 && secondVal == 0 && firstVal == 0) {
+                    if (arr[i] < 0) {
+                        firstVal = arr[i];
+                        count++;
+                    } else {
+                        secondVal = arr[i];
+                    }
+                }
+            }
+            int tempFirst = firstVal;
+            int tempSecond = secondVal;
+            int tempThird = thirdVal;
+            firstVal = Math.min(Math.min(tempFirst, tempSecond), tempThird);
+            secondVal = Math.max(Math.max(tempFirst, tempSecond), tempThird);
+            thirdVal = Math.max(Math.min(tempFirst, tempSecond), Math.min(Math.max(tempFirst, tempSecond), tempThird));
+            triplet = firstVal * secondVal * thirdVal;
+        }
+
+
+        triplet = firstVal * secondVal * thirdVal;
+        System.out.println(firstVal + " " + secondVal + " " + thirdVal);
+        return triplet;
+    }

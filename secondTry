@@ -1,0 +1,39 @@
+ public static int findTriplet(int[] arr) {
+        //Initializing variables that will later be inserted by the "extremes".
+        int largest = arr[0], secondLargest = arr[1], thirdLargest = arr[2], lowest = 0, secondLowest = 0;
+
+        for(int i = 0 ; i< arr.length ; i++) { // Loop for inserting the biggest numbers in the array.
+
+            if (arr[i] > largest) { // Checks if current number is bigger than current largest number
+                secondLargest = largest; // Replaces second largest number with largest number
+                largest = arr[i]; // Inserts current number in the loop to be the largest number
+
+            }if (arr[i] < largest && arr[i] > secondLargest) { // Checks if current number is bigger than the second largest and smaller than the largest
+                thirdLargest = secondLargest; // Replaces third largest number with second largest number.
+                secondLargest = arr[i]; // Inserts current number in the loop the be the second largest number.
+
+            }if (arr[i] < secondLargest && arr[i] > thirdLargest)// Checks if current number is bigger than the third largest number
+                thirdLargest = arr[i]; // Inserts current number in the loop to be the third largest number.
+
+        } // End of for loop
+
+        for(int i = 0 ; i<arr.length ; i++){ // // Loop for inserting the smallest numbers in the array.
+            if(arr[i] < lowest){ // // Checks if current number is smaller than current smallest number.
+                secondLowest = lowest; // Replaces second lowest number with the lowest number.
+                lowest = arr[i]; // Inserts current number in the loop to be the lowest number.
+            }
+            if (arr[i] > lowest && arr[i] < secondLowest){// Checks if current number is smaller than the second smallest number
+                secondLowest = arr[i];// Inserts current number in the loop to be the second smallest number.
+            }
+
+        } // End of for loop
+
+        //Prints out the bigger combination of numbers.
+        if(lowest*secondLowest*largest > largest*secondLargest*thirdLargest){
+            System.out.println(lowest + " " + secondLargest + " " + largest);
+        } else{
+            System.out.println(largest + " " + secondLargest + " " + thirdLargest);
+        }
+        return Math.max((lowest*secondLowest*largest), largest*secondLargest*thirdLargest); // Returns biggest triplet combination.
+
+    } // end of method
